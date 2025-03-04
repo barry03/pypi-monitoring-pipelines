@@ -38,9 +38,11 @@ pip install -r requirements.txt
   ```bash
   gcloud storage cp dags/dag_pypi.py gs://<YOUR_COMPOSER_BUCKET>/dags/
 
+
 ## 4 - Exécution du pipeline en local
     ```bash
   python src/main.py
+
 
 ## Utilisation des Vues BigQuery
 Ce projet utilise les tables brutes **BigQuery Public Datasets**, mais pour améliorer les performances, des **vues BigQuery** sont disponibles.
@@ -62,6 +64,7 @@ Si vous souhaitez utiliser une **vue BigQuery** au lieu des tables brutes, modif
 ```python
 query = "SELECT * FROM `western-watch-418016.pypi_views.recent_downloads`"
 
+
 ## 5 - Accès aux résultats
 - Les fichiers transformés sont disponibles sur **Cloud Storage** (gs://<YOUR_BUCKET_NAME>/data/)
 - Les vues sont accessibles sur BigQuery (western-watch-418016.pypi_views).
@@ -81,6 +84,7 @@ streamlit run src/dashboard.py
 
 ```bash
 pip install streamlit
+
 
 ## Contact
 Si vous avez des questions, vous pouvez me contacter :
