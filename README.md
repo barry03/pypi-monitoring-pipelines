@@ -31,15 +31,15 @@ git clone https://github.com/votre-repo/pypi_project.git
 cd pypi_project
 pip install -r requirements.txt
 
-## 3 - Déploiement 🚀
-### Déploiement du DAG Airflow
+### 3 - Déploiement 🚀
+## Déploiement du DAG Airflow
 - Placez le fichier `dag_pypi.py` dans le répertoire `dags/` du bucket Cloud Composer.
 - Synchronisez les fichiers avec :
   ```bash
   gcloud storage cp dags/dag_pypi.py gs://<YOUR_COMPOSER_BUCKET>/dags/
 
 
-## 4 - Exécution du pipeline en local
+### 4 - Exécution du pipeline en local
     ```bash
   python src/main.py
 
