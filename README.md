@@ -31,7 +31,7 @@ git clone https://github.com/votre-repo/pypi_project.git
 cd pypi_project
 pip install -r requirements.txt
 ```
-**3 - Déploiement**
+## **3 - Déploiement**
 ## Déploiement du DAG Airflow
 - Placez le fichier `dag_pypi.py` dans le répertoire `dags/` du bucket Cloud Composer.
 - Synchronisez les fichiers avec :
@@ -39,55 +39,53 @@ pip install -r requirements.txt
   gcloud storage cp dags/dag_pypi.py gs://<YOUR_COMPOSER_BUCKET>/dags/
   ```
 
-
-### 4 - **Exécution du pipeline en local**
-    ```bash
+### **4 - Exécution du pipeline en local**
+  ```bash
   python src/main.py
+  ```
 
-
-## **Utilisation des Vues BigQuery**
+### **5 - Utilisation des Vues BigQuery**
 Ce projet utilise les tables brutes **BigQuery Public Datasets**, mais pour améliorer les performances, des **vues BigQuery** sont disponibles.
 
-### **Pourquoi utiliser les vues BigQuery ?**
+### **6 - Pourquoi utiliser les vues BigQuery ?**
 - **Moins de volume de données extraites** → Réduction des coûts et des temps d’exécution.
 - **Données déjà filtrées et pré-transformées** → Moins de transformations dans le pipeline.
 - **Plus rapide pour l'analyse et le dashboard**.
 
-### **Vues disponibles :**
+### **7 - Vues disponibles :**
 | Nom de la Vue | Description |
 |---------------|-------------|
 | `pypi_views.50_downloads` | Contient uniquement les téléchargements des 15 derniers jours |
 | `pypi_views.file_downloads_extended` | Ajoute la durée entre téléchargements et l’indicateur `is_gzipped` |
 | `pypi_views.gzipped_files` | Filtre uniquement les fichiers compressés (`.gz`) |
 
-### **Comment utiliser une vue dans le pipeline ?**
+### **8 - Comment utiliser une vue dans le pipeline ?**
 Si vous souhaitez utiliser une **vue BigQuery** au lieu des tables brutes, modifiez `extract.py` en remplaçant la requête SQL par :
 ```python
 query = "SELECT * FROM `western-watch-418016.pypi_views.recent_downloads`"
+```
 
-
-## 5 - Accès aux résultats
+### **9 - Accès aux résultats**
 - Les fichiers transformés sont disponibles sur **Cloud Storage** (gs://<YOUR_BUCKET_NAME>/data/)
 - Les vues sont accessibles sur BigQuery (western-watch-418016.pypi_views).
 - Les dashboards sont accessibles sur Looker Studio ou Streamlit.
 
-## Visualisation des Dashboards
+### **10 - Visualisation des Dashboards**
 
 Les dashboards sont accessibles via **Looker Studio** (via BigQuery) ou en local avec **Streamlit**.
 
-### Exécution du dashboard avec Streamlit
+### **11 - Exécution du dashboard avec Streamlit**
 Si vous souhaitez visualiser les données en local, exécutez :
 
 ```bash
 streamlit run src/dashboard.py
-
+```
 - Prérequis : Assurez-vous d’avoir Streamlit installé dans votre environnement
-
 ```bash
 pip install streamlit
+```
 
-
-## Contact
+### **12 Contact**
 Si vous avez des questions, vous pouvez me contacter :
 - 📧 Email : barrydjoulde15@gmail.com
 - 🔗 LinkedIn : https://www.linkedin.com/in/djould%C3%A9-barry-24868a187
