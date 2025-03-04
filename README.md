@@ -64,7 +64,7 @@ Ce projet utilise les tables brutes **BigQuery Public Datasets**, mais pour amé
 **- Comment utiliser une vue dans le pipeline ?**
 Si vous souhaitez utiliser une **vue BigQuery** au lieu des tables brutes, modifiez `extract.py` en remplaçant la requête SQL par :
 ```python
-query = "SELECT * FROM `western-watch-418016.pypi_views.50_downloads`"
+query = "SELECT * FROM `western-watch-418016.pypi_views.fifth_downloads`"
 ```
 
 ### **6 - Accès aux résultats**
