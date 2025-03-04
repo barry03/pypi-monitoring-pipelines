@@ -56,9 +56,9 @@ Ce projet utilise les tables brutes **BigQuery Public Datasets**, mais pour amé
 **- Vues disponibles :**
 | Nom de la vue | Description |
 | ------ | ------ |
-| `pypi_views.50_downloads` | Contient uniquement les téléchargements des 15 derniers jours|
-| `pypi_views.file_downloads_extended`   | Ajoute la durée entre téléchargements et l’indicateur `is_gzipped`|
-| `pypi_views.gzipped_files` | Filtre uniquement les fichiers compressés (`.gz`)|
+| `pypi_views.fifth_downloads` | Contient uniquement les téléchargements des 15 derniers jours|
+| `pypi_views.downloads_by_day_country`   | Agrège le nombre de téléchargements par jour et par pays|
+| `pypi_views.gzipped_downloads` | Filtre uniquement les fichiers compressés (`.gz`)|
 
 
 **- Comment utiliser une vue dans le pipeline ?**
