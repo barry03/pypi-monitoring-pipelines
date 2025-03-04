@@ -25,14 +25,14 @@ Assurez-vous d'avoir :
 - **Un bucket GCS** pour stocker les fichiers transformés
 - **Un environnement Cloud Composer (Airflow)** configuré
 
-### 2 - **Cloner le projet et installer les dépendances
+### 2 - **Cloner le projet et installer les dépendances**
 ```bash
 git clone https://github.com/votre-repo/pypi_project.git
 cd pypi_project
 pip install -r requirements.txt
 
 
-### 3 - Déploiement 🚀
+### 3 - **Déploiement**
 ## Déploiement du DAG Airflow
 - Placez le fichier `dag_pypi.py` dans le répertoire `dags/` du bucket Cloud Composer.
 - Synchronisez les fichiers avec :
@@ -40,12 +40,12 @@ pip install -r requirements.txt
   gcloud storage cp dags/dag_pypi.py gs://<YOUR_COMPOSER_BUCKET>/dags/
 
 
-### 4 - Exécution du pipeline en local
+### 4 - **Exécution du pipeline en local**
     ```bash
   python src/main.py
 
 
-## Utilisation des Vues BigQuery
+## **Utilisation des Vues BigQuery**
 Ce projet utilise les tables brutes **BigQuery Public Datasets**, mais pour améliorer les performances, des **vues BigQuery** sont disponibles.
 
 ### **Pourquoi utiliser les vues BigQuery ?**
