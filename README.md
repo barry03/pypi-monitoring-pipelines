@@ -25,14 +25,13 @@ Assurez-vous d'avoir :
 - **Un bucket GCS** pour stocker les fichiers transformés
 - **Un environnement Cloud Composer (Airflow)** configuré
 
-### 2 - **Cloner le projet et installer les dépendances**
+### **2 - Cloner le projet et installer les dépendances**
 ```bash
 git clone https://github.com/votre-repo/pypi_project.git
 cd pypi_project
 pip install -r requirements.txt
 
-
-### 3 - **Déploiement**
+**3 - Déploiement**
 ## Déploiement du DAG Airflow
 - Placez le fichier `dag_pypi.py` dans le répertoire `dags/` du bucket Cloud Composer.
 - Synchronisez les fichiers avec :
