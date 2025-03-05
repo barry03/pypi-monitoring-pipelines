@@ -35,7 +35,7 @@ pip install -r requirements.txt
 Ce projet peut être déployé de deux manières : 1. Avec le script deploy.sh (déploiement automatiquement sur GCS & BigQuery)
 2. Avec Docker (sous forme d'image conteneurisée)
 
-1. Option 1: Déploiement Automatisé avec deploy.sh
+**Option 1:** Déploiement Automatisé avec deploy.sh
 Ce script automatise tout le processus:
 - Envoi du code source dans GCS
 - Déploiement du DAG sur Cloud Composer
@@ -47,8 +47,9 @@ chmod +x deploy.sh  # Rendre le script exécutable
 ```
 NB: Assurez-vous d’avoir configuré gcloud et d’être connecté à votre projet GCP avant d’exécuter ce script.
 
-2. Déploiement avec Docker
+**Option 2 :** Déploiement avec Docker
 Une image Docker a été créée pour éxécuter ce projet dans un environnement conteneurisé.
+
 **Étapes de déploiement :**
 1. Construire l'image Docker:
 ```bash
@@ -123,7 +124,7 @@ streamlit run src/dashboard.py
 pip install streamlit
 ```
 
-### **8 Contact**
+### **8 - Contact**
 Si vous avez des questions, vous pouvez me contacter :
 - 📧 Email : barrydjoulde15@gmail.com
 - 🔗 LinkedIn : https://www.linkedin.com/in/djould%C3%A9-barry-24868a187
