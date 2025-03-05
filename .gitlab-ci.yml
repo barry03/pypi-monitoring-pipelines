@@ -23,8 +23,7 @@ build_and_push:
   stage: build_and_push
   script:
     - docker build -t $GCR_REGION/$GCP_PROJECT_ID/pypi-monitoring-pipeline/$IMAGE_NAME:$CI_COMMIT_SHA .
-    - docker tag $GCR_REGION/$GCP_PROJECT_ID/pypi-monitoring-pipeline/$IMAGE_NAME:$CI_COMMIT_SHA \
-                 $GCR_REGION/$GCP_PROJECT_ID/pypi-monitoring-pipeline/$IMAGE_NAME:latest
+    - docker tag "$GCR_REGION/$GCP_PROJECT_ID/pypi-monitoring-pipeline/$IMAGE_NAME:$CI_COMMIT_SHA" "$GCR_REGION/$GCP_PROJECT_ID/pypi-monitoring-pipeline/$IMAGE_NAME:latest"
     - docker push $GCR_REGION/$GCP_PROJECT_ID/pypi-monitoring-pipeline/$IMAGE_NAME:$CI_COMMIT_SHA
     - docker push $GCR_REGION/$GCP_PROJECT_ID/pypi-monitoring-pipeline/$IMAGE_NAME:latest
   rules:
