@@ -11,7 +11,7 @@ services:
   - docker:dind
 
 stages:
-  - build
+  - build_and_push
   - deploy
 
 before_script:
@@ -19,17 +19,11 @@ before_script:
   - gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
   - gcloud auth configure-docker $GCR_REGION
 
-build_image:
-  stage: build
+build_and_push_image:
+  stage: build_and_push
   script:
     - docker build -t $GCR_REGION/$GCP_PROJECT_ID/$IMAGE_NAME:$CI_COMMIT_SHA .
     - docker tag $GCR_REGION/$GCP_PROJECT_ID/$IMAGE_NAME:$CI_COMMIT_SHA $GCR_REGION/$GCP_PROJECT_ID/$IMAGE_NAME:latest
-  rules:
-    - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main"
-
-push_image:
-  stage: deploy
-  script:
     - docker push $GCR_REGION/$GCP_PROJECT_ID/$IMAGE_NAME:$CI_COMMIT_SHA
     - docker push $GCR_REGION/$GCP_PROJECT_ID/$IMAGE_NAME:latest
   rules:
