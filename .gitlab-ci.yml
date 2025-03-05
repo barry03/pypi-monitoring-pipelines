@@ -1,0 +1,38 @@
+image: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+
+variables:
+  IMAGE_NAME: "pypi-monitoring-pipeline"
+  GCP_PROJECT_ID: "western-watch-418016"
+  GCR_REGION: "gcr.io"
+
+stages:
+  - build
+  - deploy
+
+before_script:
+  - echo "$GCP_SERVICE_KEY_B64" | base64 --decode > /tmp/gcp-key.json
+  - gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
+  - gcloud auth configure-docker $GCR_REGION
+
+build_image:
+  stage: build
+  script:
+    - docker build -t $GCR_REGION/$GCP_PROJECT_ID/$IMAGE_NAME:$CI_COMMIT_SHA .
+    - docker tag $GCR_REGION/$GCP_PROJECT_ID/$IMAGE_NAME:$CI_COMMIT_SHA $GCR_REGION/$GCP_PROJECT_ID/$IMAGE_NAME:latest
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main"
+
+push_image:
+  stage: deploy
+  script:
+    - docker push $GCR_REGION/$GCP_PROJECT_ID/$IMAGE_NAME:$CI_COMMIT_SHA
+    - docker push $GCR_REGION/$GCP_PROJECT_ID/$IMAGE_NAME:latest
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "main"
+
+deploy_cloud_run:
+  stage: deploy
+  script:
+    - gcloud run deploy pypi-monitoring-pipeline --image $GCR_REGION/$GCP_PROJECT_ID/$IMAGE_NAME:latest --region europe-west1 --platform managed --allow-unauthenticated
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
