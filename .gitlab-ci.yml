@@ -4,6 +4,11 @@ variables:
   IMAGE_NAME: "pypi-monitoring-pipeline"
   GCP_PROJECT_ID: "western-watch-418016"
   GCR_REGION: "gcr.io"
+  DOCKER_HOST: "tcp://docker:2375"
+  DOCKER_TLS_CERTDIR: ""
+
+services:
+  - docker:dind
 
 stages:
   - build
