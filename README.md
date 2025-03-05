@@ -1,93 +1,137 @@
-# pypi-monitoring-pipeline
+# Pipeline de Monitoring des Téléchargements PyPi
 
+## Présentation
 
+Ce projet met en place un pipeline ETL pour monitorer les téléchargements PyPi sur BigQuery. Il comprend :
+- **Extraction** des données depuis `bigquery-public-data.pypi.file_downloads`
+- **Transformation** des données (formatage, ajout de métriques comme `is_gzipped`)
+- **Chargement** des données sur **Google Cloud Storage (GCS)**
+- **Orchestration** du pipeline avec **Airflow (Cloud Composer)**
+- **Visualisation** avec **Looker Studio et Streamlit**
+- **Création de vues BigQuery** pour des analyses optimisées
 
-## Getting started
+## **Architecture du projet**
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Voici un aperçu de l'architecture du pipeline ETL : Le pipeline suit une architecture en plusieurs étapes allant de l’extraction des données brutes jusqu'à leur visualisation dans des dashboards interactifs.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+<img src="docs/archi.png" alt="Architecture ETL PyPi" width="600" heigth="450">
 
-## Add your files
+## **Installation et Configuration**
+### 1 - **Prérequis**
+Assurez-vous d'avoir :
+- **Python 3.11+** et `pip` installés
+- **Google Cloud SDK** (`gcloud`) configuré avec un projet actif
+- **BigQuery API, Cloud Storage API et Cloud Composer activés**
+- **Un bucket GCS** pour stocker les fichiers transformés
+- **Un environnement Cloud Composer (Airflow)** configuré
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
+### **2 - Cloner le projet et installer les dépendances**
+```bash
+git clone https://github.com/votre-repo/pypi_project.git
+cd pypi_project
+pip install -r requirements.txt
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/barrydjoulde/pypi-monitoring-pipeline.git
-git branch -M main
-git push -uf origin main
+### **3 - Déploiement**
+Ce projet peut être déployé de deux manières : 1. Avec le script `deploy.sh` (déploiement automatiquement sur GCS & BigQuery)
+2. **Avec Docker** (sous forme d'image conteneurisée)
+
+**Option 1:** Déploiement Automatisé avec `deploy.sh`
+Ce script automatise tout le processus:
+- Envoi du code source dans GCS
+- Déploiement du DAG sur Cloud Composer
+- Création/Mise à jour des vues BigQuery
+- Lancement du pipeline en local
+```bash
+chmod +x deploy.sh  # Rendre le script exécutable
+./deploy.sh
+```
+NB: Assurez-vous d’avoir configuré `gcloud` et d’être connecté à votre projet GCP avant d’exécuter ce script.
+
+**Option 2 :** Déploiement avec Docker
+Une image Docker a été créée pour éxécuter ce projet dans un environnement conteneurisé.
+
+**Étapes de déploiement :**
+1. Construire l'image Docker:
+```bash
+docker build -t pypi-monitoring-pipeline .
+```
+2. Exécuter le conteneur et lancer le pipeline :
+```bash
+docker run --rm pypi-monitoring-pipeline
+```
+3. Pousser l’image sur Google Container Registry (GCR) :
+```bash
+gcloud auth configure-docker
+docker tag pypi-monitoring-pipeline gcr.io/<PROJECT_ID>/pypi-monitoring-pipeline
+docker push gcr.io/<PROJECT_ID>/pypi-monitoring-pipeline
+```
+**NB:** Remplacer <PROJECT_ID> par l'ID de votre projet
+
+**Déploiement du DAG Airflow (Manuel)**
+Si vous souhaitez ajouter ou mettre à jour manuellement le DAG sur Cloud Composer :
+```bash
+gcloud storage cp dags/dag_pypi.py gs://<YOUR_COMPOSER_BUCKET>/dags/
+```
+- Accédez à Airflow Web UI depuis Cloud Composer.
+- Activez le DAG pypi_data_pipeline
+- Lancez une exécution manuelle.
+
+### **4 - Exécution du pipeline en local**
+  ```bash
+  python src/main.py
+  ```
+
+### **5 - Utilisation des Vues BigQuery**
+Ce projet utilise les tables brutes **BigQuery Public Datasets**, mais pour améliorer les performances, des **vues BigQuery** sont disponibles.
+
+**- Pourquoi utiliser les vues BigQuery ?**
+
+- **Moins de volume de données extraites** → Réduction des coûts et des temps d’exécution.
+- **Données déjà filtrées et pré-transformées** → Moins de transformations dans le pipeline.
+- **Plus rapide pour l'analyse et le dashboard**.
+
+**- Vues disponibles :**
+| Nom de la vue | Description |
+| ------ | ------ |
+| `pypi_views.fifth_downloads` | Contient uniquement les téléchargements des `15 derniers jours`|
+| `pypi_views.downloads_by_day_country`   | Agrège le nombre de téléchargements par jour et par pays|
+| `pypi_views.gzipped_downloads` | Filtre uniquement les fichiers compressés (`.gz`)|
+| `pypi_views.download_intervals` | Analyser la fréquence des téléchargements des projets sur PyPI|
+
+
+**- Comment utiliser une vue dans le pipeline ?**
+Si vous souhaitez utiliser une **vue BigQuery** au lieu des tables brutes, modifiez `extract.py` en remplaçant la requête SQL par :
+```python
+query = "SELECT * FROM `western-watch-418016.pypi_views.fifth_downloads`"
 ```
 
-## Integrate with your tools
+### **6 - Accès aux résultats**
+- Les fichiers transformés sont disponibles sur **Cloud Storage** (gs://<YOUR_BUCKET_NAME>/data/)
+- Les vues sont accessibles sur BigQuery (western-watch-418016.pypi_views).
+- Les dashboards sont accessibles sur Looker Studio ou Streamlit.
 
-- [ ] [Set up project integrations](https://gitlab.com/barrydjoulde/pypi-monitoring-pipeline/-/settings/integrations)
+### **7 - Visualisation des Dashboards**
 
-## Collaborate with your team
+Les dashboards sont accessibles via **Looker Studio** (via BigQuery) ou en local avec **Streamlit**.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+** - Exécution du dashboard avec Streamlit**
+Si vous souhaitez visualiser les données en local, exécutez :
 
-## Test and Deploy
+```bash
+streamlit run src/dashboard.py
+```
+- Prérequis : Assurez-vous d’avoir Streamlit installé dans votre environnement
+```bash
+pip install streamlit
+```
 
-Use the built-in continuous integration in GitLab.
+### **8 - Contact**
+Si vous avez des questions, vous pouvez me contacter :
+- 📧 Email : barrydjoulde15@gmail.com
+- 🔗 LinkedIn : https://www.linkedin.com/in/djould%C3%A9-barry-24868a187
+- 📝 Issues : Ouvrez une issue sur [le repo GitLab](https://gitlab.com/barrydjoulde/pypi-monitoring-pipeline)
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
 
-***
 
-# Editing this README
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
 
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
