@@ -35,12 +35,45 @@ pip install -r requirements.txt
 Ce projet peut être déployé de deux manières : 1. Avec le script deploy.sh (déploiement automatiquement sur GCS & BigQuery)
 2. Avec Docker (sous forme d'image conteneurisée)
 
-#### Déploiement du DAG Airflow
-- Placez le fichier `dag_pypi.py` dans le répertoire `dags/` du bucket Cloud Composer.
-- Synchronisez les fichiers avec :
-  ```bash
-  gcloud storage cp dags/dag_pypi.py gs://<YOUR_COMPOSER_BUCKET>/dags/
-  ```
+1. Option 1: Déploiement Automatisé avec deploy.sh
+Ce script automatise tout le processus:
+- Envoi du code source dans GCS
+- Déploiement du DAG sur Cloud Composer
+- Création/Mise à jour des vues BigQuery
+- Lancement du pipeline en local
+```bash
+chmod +x deploy.sh  # Rendre le script exécutable
+./deploy.sh
+```
+NB: Assurez-vous d’avoir configuré gcloud et d’être connecté à votre projet GCP avant d’exécuter ce script.
+
+2. Déploiement avec Docker
+Une image Docker a été créée pour éxécuter ce projet dans un environnement conteneurisé.
+**Étapes de déploiement :**
+1. Construire l'image Docker:
+```bash
+docker build -t pypi-monitoring-pipeline .
+```
+2. Exécuter le conteneur et lancer le pipeline :
+```bash
+docker run --rm pypi-monitoring-pipeline
+```
+3. Pousser l’image sur Google Container Registry (GCR) :
+```bash
+gcloud auth configure-docker
+docker tag pypi-monitoring-pipeline gcr.io/<PROJECT_ID>/pypi-monitoring-pipeline
+docker push gcr.io/<PROJECT_ID>/pypi-monitoring-pipeline
+```
+**NB:** Remplacer <PROJECT_ID> par l'ID de votre projet
+
+**Déploiement du DAG Airflow (Manuel)**
+Si vous souhaitez ajouter ou mettre à jour manuellement le DAG sur Cloud Composer :
+```bash
+gcloud storage cp dags/dag_pypi.py gs://<YOUR_COMPOSER_BUCKET>/dags/
+```
+- Accédez à Airflow Web UI depuis Cloud Composer.
+- Activez le DAG pypi_data_pipeline
+- Lancez une exécution manuelle.
 
 ### **4 - Exécution du pipeline en local**
   ```bash
