@@ -32,6 +32,9 @@ cd pypi_project
 pip install -r requirements.txt
 ```
 ### **3 - Déploiement**
+Ce projet peut être déployé de deux manières : 1. Avec le script deploy.sh (déploiement automatiquement sur GCS & BigQuery)
+2. Avec Docker (sous forme d'image conteneurisée)
+
 #### Déploiement du DAG Airflow
 - Placez le fichier `dag_pypi.py` dans le répertoire `dags/` du bucket Cloud Composer.
 - Synchronisez les fichiers avec :
