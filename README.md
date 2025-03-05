@@ -14,7 +14,7 @@ Ce projet met en place un pipeline ETL pour monitorer les téléchargements PyPi
 
 Voici un aperçu de l'architecture du pipeline ETL : Le pipeline suit une architecture en plusieurs étapes allant de l’extraction des données brutes jusqu'à leur visualisation dans des dashboards interactifs.
 
-<img src="docs/arch.png" alt="Architecture ETL PyPi" width="500" heigth="400">
+<img src="docs/archi.png" alt="Architecture ETL PyPi" width="600" heigth="450">
 
 ## **Installation et Configuration**
 ### 1 - **Prérequis**
@@ -96,6 +96,7 @@ Ce projet utilise les tables brutes **BigQuery Public Datasets**, mais pour amé
 | `pypi_views.fifth_downloads` | Contient uniquement les téléchargements des `15 derniers jours`|
 | `pypi_views.downloads_by_day_country`   | Agrège le nombre de téléchargements par jour et par pays|
 | `pypi_views.gzipped_downloads` | Filtre uniquement les fichiers compressés (`.gz`)|
+| `pypi_views.download_intervals` | Analyser la fréquence des téléchargements des projets sur PyPI|
 
 
 **- Comment utiliser une vue dans le pipeline ?**
