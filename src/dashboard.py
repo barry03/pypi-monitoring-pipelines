@@ -9,8 +9,8 @@ st.set_page_config(page_title="Dashboard PyPi", layout="wide")
 df = utils.load_data()
 df = utils.preprocess_timestamps(df)
 
-# KPIs principaux
-metrics = utils.compute_metrics(df)
+# indicateurs principaux
+metrics = utils.metrics(df)
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Nombre total de téléchargements", metrics["total_downloads"])
 col2.metric("Taille totale des fichiers téléchargés (MB)", metrics["total_size_mb"])

@@ -1,10 +1,8 @@
 import os
 import sys
-from src import config
+import config
 
-print(f"TEST CHEMIN : GCP_CREDENTIALS_PATH = {config.GCP_CREDENTIALS_PATH}")
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = config.GCP_CREDENTIALS_PATH
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.extract import get_data

@@ -7,6 +7,6 @@ def transform_data(df):
 
     df["day_of_week"] = df["timestamp"].dt.day_name()
     df["hour"] = df["timestamp"].dt.hour
-    df["is_gzipped"] = df["filename"].str.endswith(".gz")
+    df["is_gzipped"] = df["filename"].str.endswith((".gz", ".tar.gz"))
 
     return df

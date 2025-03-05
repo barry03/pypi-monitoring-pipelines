@@ -20,7 +20,7 @@ def preprocess_timestamps(df):
     return df
 
 # Fonction pour obtenir les métriques principales
-def compute_metrics(df):
+def metrics(df):
     """Calcule les métriques principales."""
     total_downloads = df.shape[0]
     total_size_mb = round(df["package_size"].sum() / 1e6, 2)

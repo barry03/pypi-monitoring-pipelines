@@ -24,7 +24,7 @@ dag = DAG(
 
 run_main = BashOperator(
     task_id="run_main",
-    bash_command="PYTHONPATH=/home/airflow/gcs/data python /home/airflow/gcs/data/main.py",
+    bash_command="PYTHONPATH=/home/airflow/gcs/data/src python /home/airflow/gcs/data/src/main.py",
     dag=dag,
 )
 

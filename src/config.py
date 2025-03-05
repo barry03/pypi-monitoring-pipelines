@@ -1,7 +1,9 @@
 import os
 
-GCP_CREDENTIALS_PATH = "/home/airflow/gcs/data/config/gcp_credentials.json"
-print(f"Vérification : GCP_CREDENTIALS_PATH = {GCP_CREDENTIALS_PATH}")
+if os.path.exists("/home/airflow/gcs/data/config/gcp_credentials.json"):
+    GCP_CREDENTIALS_PATH = "/home/airflow/gcs/data/config/gcp_credentials.json"
+else:
+    GCP_CREDENTIALS_PATH = "config/gcp_credentials.json"
 
 GCP_PROJECT_ID = "western-watch-418016"
 
@@ -16,7 +18,7 @@ GCS_BUCKET_NAME = "europe-west1-pypi-airflow-3f26eac0-bucket"
 
 # Nombre de lignes à récupérer
 BQ_LIMIT = 10000000
-DAYS_HISTORY = 15
+#DAYS_HISTORY = 15
 
 # Format du fichier de sortie
 DATA_FORMAT = "csv"
