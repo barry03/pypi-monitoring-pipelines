@@ -14,7 +14,7 @@ Ce projet met en place un pipeline ETL pour monitorer les téléchargements PyPi
 
 Voici un aperçu de l'architecture du pipeline ETL : Le pipeline suit une architecture en plusieurs étapes allant de l’extraction des données brutes jusqu'à leur visualisation dans des dashboards interactifs.
 
-<img src="docs/arch.png" alt="Architecture ETL PyPi" width="600">
+<img src="docs/arch.png" alt="Architecture ETL PyPi" width="500" heigth="400">
 
 ## **Installation et Configuration**
 ### 1 - **Prérequis**
