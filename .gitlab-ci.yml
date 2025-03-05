@@ -20,7 +20,7 @@ before_script:
   - gcloud auth configure-docker $GCR_REGION
 
 build_and_push:
-  stage: build
+  stage: build_and_push
   script:
     - docker build -t $GCR_REGION/$GCP_PROJECT_ID/pypi-monitoring-pipeline/$IMAGE_NAME:$CI_COMMIT_SHA .
     - docker tag $GCR_REGION/$GCP_PROJECT_ID/pypi-monitoring-pipeline/$IMAGE_NAME:$CI_COMMIT_SHA \
