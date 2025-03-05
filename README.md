@@ -32,10 +32,10 @@ cd pypi_project
 pip install -r requirements.txt
 ```
 ### **3 - Déploiement**
-Ce projet peut être déployé de deux manières : 1. Avec le script deploy.sh (déploiement automatiquement sur GCS & BigQuery)
-2. Avec Docker (sous forme d'image conteneurisée)
+Ce projet peut être déployé de deux manières : 1. Avec le script `deploy.sh` (déploiement automatiquement sur GCS & BigQuery)
+2. **Avec Docker** (sous forme d'image conteneurisée)
 
-**Option 1:** Déploiement Automatisé avec deploy.sh
+**Option 1:** Déploiement Automatisé avec `deploy.sh`
 Ce script automatise tout le processus:
 - Envoi du code source dans GCS
 - Déploiement du DAG sur Cloud Composer
@@ -45,7 +45,7 @@ Ce script automatise tout le processus:
 chmod +x deploy.sh  # Rendre le script exécutable
 ./deploy.sh
 ```
-NB: Assurez-vous d’avoir configuré gcloud et d’être connecté à votre projet GCP avant d’exécuter ce script.
+NB: Assurez-vous d’avoir configuré `gcloud` et d’être connecté à votre projet GCP avant d’exécuter ce script.
 
 **Option 2 :** Déploiement avec Docker
 Une image Docker a été créée pour éxécuter ce projet dans un environnement conteneurisé.
