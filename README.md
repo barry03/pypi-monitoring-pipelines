@@ -93,7 +93,7 @@ Ce projet utilise les tables brutes **BigQuery Public Datasets**, mais pour amé
 **- Vues disponibles :**
 | Nom de la vue | Description |
 | ------ | ------ |
-| `pypi_views.fifth_downloads` | Contient uniquement les téléchargements des 15 derniers jours|
+| `pypi_views.fifth_downloads` | Contient uniquement les téléchargements des `15 derniers jours`|
 | `pypi_views.downloads_by_day_country`   | Agrège le nombre de téléchargements par jour et par pays|
 | `pypi_views.gzipped_downloads` | Filtre uniquement les fichiers compressés (`.gz`)|
 
