@@ -4,23 +4,18 @@ variables:
   IMAGE_NAME: "pypi-monitoring-pipeline"
   GCP_PROJECT_ID: "western-watch-418016"
   GCR_REGION: "gcr.io"
-  DOCKER_HOST: "tcp://docker:2375/" 
 
 stages:
   - build
   - deploy
 
 before_script:
-  - apt-get update && apt-get install -y docker.io
   - echo "$GCP_SERVICE_KEY_B64" | base64 -d > /tmp/gcp-key.json
   - gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
   - gcloud auth configure-docker $GCR_REGION
 
 build_image:
   stage: build
-  image: docker:latest
-  services:
-    - docker:dind
   script:
     - docker build -t $GCR_REGION/$GCP_PROJECT_ID/$IMAGE_NAME:$CI_COMMIT_SHA .
     - docker tag $GCR_REGION/$GCP_PROJECT_ID/$IMAGE_NAME:$CI_COMMIT_SHA $GCR_REGION/$GCP_PROJECT_ID/$IMAGE_NAME:latest
@@ -29,9 +24,6 @@ build_image:
 
 push_image:
   stage: deploy
-  image: docker:latest
-  services:
-    - docker:dind
   script:
     - docker push $GCR_REGION/$GCP_PROJECT_ID/$IMAGE_NAME:$CI_COMMIT_SHA
     - docker push $GCR_REGION/$GCP_PROJECT_ID/$IMAGE_NAME:latest
@@ -40,7 +32,6 @@ push_image:
 
 deploy_cloud_run:
   stage: deploy
-  image: google/cloud-sdk:latest
   script:
     - gcloud run deploy pypi-monitoring-pipeline --image $GCR_REGION/$GCP_PROJECT_ID/$IMAGE_NAME:latest --region europe-west1 --platform managed --allow-unauthenticated
   rules:
