@@ -1,4 +1,4 @@
-image: docker:latest
+image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
 
 variables:
   IMAGE_NAME: "pypi-monitoring-pipeline"
@@ -11,6 +11,7 @@ stages:
   - deploy
 
 before_script:
+  - apt-get update && apt-get install -y docker.io
   - echo "$GCP_SERVICE_KEY_B64" | base64 -d > /tmp/gcp-key.json
   - gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
   - gcloud auth configure-docker $GCR_REGION
