@@ -1,10 +1,13 @@
 import streamlit as st
 import utils
 import config
+import matplotlib.pyplot as plt
 
 # Configuration de la page Streamlit
 st.set_page_config(page_title="Dashboard PyPi", layout="wide")
 
+# Réduction de la taille par défaut des graphiques
+plt.rcParams['figure.figsize'] = [7, 3]
 # Chargement des données et prétraitement
 df = utils.load_data()
 df = utils.preprocess_timestamps(df)

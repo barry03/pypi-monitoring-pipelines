@@ -18,7 +18,7 @@ dag = DAG(
     "pypi_data_pipeline",
     default_args=default_args,
     description="Pipeline Airflow pour exécuter le script main.py",
-    schedule_interval=None,
+    schedule_interval="0 0 * * *",
     catchup=False,
 )
 
