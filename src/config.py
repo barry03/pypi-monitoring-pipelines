@@ -17,7 +17,7 @@ BQ_TABLE_METADATA = "bigquery-public-data.pypi.distribution_metadata"
 GCS_BUCKET_NAME = "europe-west1-pypi-airflow-3f26eac0-bucket"
 
 # Nombre de lignes à récupérer
-BQ_LIMIT = 5000000
+BQ_LIMIT = 1000000
 #DAYS_HISTORY = 15
 
 # Format du fichier de sortie
