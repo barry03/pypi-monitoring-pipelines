@@ -2,11 +2,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
+import gzip
 
 # Fonction de chargement des données
 @st.cache_data
-def load_data(filepath="data/pypi_downloads.csv"):
-    df = pd.read_csv(filepath)
+def load_data(filepath="data/pypi_downloads.csv.gz"):
+    with gzip.open(filepath, "rt") as f:
+        df = pd.read_csv(f)
     return df
 
 # Fonction pour nettoyer et convertir le timestamp
