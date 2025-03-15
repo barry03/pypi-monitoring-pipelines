@@ -2,6 +2,13 @@
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
+
+# Ignorer les environnements virtuels Python
+venv/
+.gcp_project_env/
+.gcp_project_env/*
+lib/python3.11/site-packages/
 
 # Ignore les environnements virtuels
 venv/
@@ -14,3 +21,16 @@ config/gcp_credentials.json
 # Ignore les fichiers spécifiques à VSCode ou IDE
 .vscode/
 .idea/
+
+# Ignorer les fichiers de logs et de debug
+logs/
+*.log
+
+# Ignorer les fichiers spécifiques à macOS (si tu es sur Mac)
+.DS_Store
+
+# Ignorer les fichiers de compilation C/C++
+*.o
+*.so
+*.dylib
+*.bin
